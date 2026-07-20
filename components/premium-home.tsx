@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, BookOpen, BriefcaseBusiness, CheckCircle2, Clock3, Compass, Gift, GraduationCap, Mail, MapPin, Menu, MoonStar, Phone, Plane, Play, Sparkles, Stars, SunMedium, X } from "lucide-react";
+import { ArrowRight, BookOpen, BriefcaseBusiness, CheckCircle2, ChevronDown, Clock3, Compass, Gift, GraduationCap, Mail, MapPin, Menu, MoonStar, Phone, Plane, Play, Sparkles, Stars, SunMedium, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -49,6 +49,12 @@ const services = [
   { icon: BriefcaseBusiness, title: "Aircraft Hire", text: "Access premium aircraft for business travel, scenic routes, or private missions." },
   { icon: Compass, title: "Corporate Experiences", text: "Create unforgettable aviation moments for team outings and client events." },
   { icon: Gift, title: "Gift Experiences", text: "Turn a flying day into a memorable surprise with premium voucher packages." },
+];
+
+const navGroups = [
+  { label: "Experiences", items: [{ label: "Flight Experiences", href: "#experiences" }, { label: "Training", href: "#training" }, { label: "Gift Experiences", href: "#gifts" }] },
+  { label: "About", items: [{ label: "What We Do", href: "#what-we-do" }, { label: "Why Choose Us", href: "#about" }, { label: "Fleet", href: "#fleet" }] },
+  { label: "Contact", items: [{ label: "Get in Touch", href: "#contact" }, { label: "Enquire", href: "#contact" }] },
 ];
 
 const aircraft = [
@@ -132,6 +138,7 @@ function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
 
 export default function PremiumHome() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [openNavGroup, setOpenNavGroup] = useState<string | null>(null);
   const [theme, setTheme] = useState<ThemeMode>(() => {
     if (typeof window === "undefined") {
       return "dark";
@@ -209,19 +216,24 @@ export default function PremiumHome() {
             </div>
           </Link>
 
-          <nav className="hidden items-center gap-8 text-sm font-medium lg:flex">
-            {[
-              ["Home", "#home"],
-              ["Flight Experiences", "#experiences"],
-              ["Flight Training", "#training"],
-              ["Gift Vouchers", "#gifts"],
-              ["Fleet", "#fleet"],
-              ["About", "#about"],
-              ["Contact", "#contact"],
-            ].map(([label, href]) => (
-              <Link key={href} href={href} className="transition hover:text-[#D71920]">
-                {label}
-              </Link>
+          <nav className="hidden items-center gap-2 text-sm font-medium lg:flex">
+            <Link href="#home" className="rounded-full px-3 py-2 transition hover:bg-white/10 hover:text-[#D71920]">Home</Link>
+            {navGroups.map((group) => (
+              <div key={group.label} className="relative">
+                <button type="button" onClick={() => setOpenNavGroup(openNavGroup === group.label ? null : group.label)} className="flex items-center gap-1 rounded-full px-3 py-2 transition hover:bg-white/10 hover:text-[#D71920]">
+                  {group.label}
+                  <ChevronDown size={15} className={`transition ${openNavGroup === group.label ? "rotate-180" : ""}`} />
+                </button>
+                {openNavGroup === group.label ? (
+                  <div className={`absolute left-0 mt-2 w-56 rounded-2xl border border-white/10 p-2 shadow-xl backdrop-blur ${panelClass}`}>
+                    {group.items.map((item) => (
+                      <Link key={item.href} href={item.href} onClick={() => setOpenNavGroup(null)} className="block rounded-xl px-3 py-2 text-sm transition hover:bg-white/10 hover:text-[#D71920]">
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
             ))}
           </nav>
 
@@ -233,7 +245,7 @@ export default function PremiumHome() {
               <Link href="/dashboard" className="hidden rounded-full border border-[#004A99]/20 bg-[#004A99] px-5 py-2 text-sm font-semibold text-white sm:inline-flex">Dashboard</Link>
             ) : (
               <button onClick={() => { setAuthMode("register"); setAuthModalOpen(true); }} className="hidden rounded-full bg-[#D71920] px-5 py-2 text-sm font-semibold text-white transition hover:bg-[#b7141a] sm:inline-flex">
-                Book Now
+                Enquire
               </button>
             )}
             <button className="rounded-full border border-white/10 p-2 lg:hidden" onClick={() => setMobileMenuOpen((prev) => !prev)} aria-label="Toggle navigation">
@@ -246,21 +258,25 @@ export default function PremiumHome() {
           {mobileMenuOpen ? (
             <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className={`border-t border-white/10 px-4 py-5 lg:hidden ${navClass}`}>
               <div className="mx-auto flex max-w-7xl flex-col gap-3 text-sm font-medium">
-                {[
-                  ["Home", "#home"],
-                  ["Flight Experiences", "#experiences"],
-                  ["Flight Training", "#training"],
-                  ["Gift Vouchers", "#gifts"],
-                  ["Fleet", "#fleet"],
-                  ["About", "#about"],
-                  ["Contact", "#contact"],
-                ].map(([label, href]) => (
-                  <Link key={href} href={href} onClick={() => setMobileMenuOpen(false)} className="rounded-2xl px-3 py-2 transition hover:bg-white/10">
-                    {label}
-                  </Link>
+                {navGroups.map((group) => (
+                  <div key={group.label} className="rounded-2xl border border-white/10 p-2">
+                    <button type="button" onClick={() => setOpenNavGroup(openNavGroup === group.label ? null : group.label)} className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-left transition hover:bg-white/10">
+                      <span>{group.label}</span>
+                      <ChevronDown size={15} className={`transition ${openNavGroup === group.label ? "rotate-180" : ""}`} />
+                    </button>
+                    {openNavGroup === group.label ? (
+                      <div className="mt-2 flex flex-col gap-1 px-1 pb-1">
+                        {group.items.map((item) => (
+                          <Link key={item.href} href={item.href} onClick={() => { setMobileMenuOpen(false); setOpenNavGroup(null); }} className="rounded-xl px-3 py-2 transition hover:bg-white/10">
+                            {item.label}
+                          </Link>
+                        ))}
+                      </div>
+                    ) : null}
+                  </div>
                 ))}
                 <button onClick={() => { setAuthMode("register"); setAuthModalOpen(true); setMobileMenuOpen(false); }} className="rounded-full bg-[#D71920] px-4 py-2 text-left font-semibold text-white">
-                  Book Now
+                  Enquire
                 </button>
               </div>
             </motion.div>
@@ -283,20 +299,20 @@ export default function PremiumHome() {
             <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }} className="max-w-3xl">
               <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-medium text-slate-200 backdrop-blur-md">
                 <Sparkles size={16} className="text-[#D71920]" />
-                Premium aviation experiences & bespoke training
+                Tailored aviation experiences and specialist instruction
               </div>
               <h1 className="text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-7xl">
-                Experience the thrill of real jet aviation.
+                Elevate your next flight.
               </h1>
               <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300 sm:text-xl">
-                Fly with experienced instructors and discover the excitement of military-inspired aviation experiences designed for discerning travelers.
+                Discover private flying days, structured training, and premium aviation moments tailored to your goals with a calm and polished team.
               </p>
               <div className="mt-10 flex flex-wrap gap-4">
                 <button onClick={() => { setAuthMode("register"); setAuthModalOpen(true); }} className="inline-flex items-center gap-2 rounded-full bg-[#D71920] px-6 py-3 font-semibold text-white transition hover:bg-[#b7141a]">
-                  Book Your Flight <ArrowRight size={18} />
+                  Explore Our Services <ArrowRight size={18} />
                 </button>
-                <a href="#experiences" className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-3 font-semibold text-white transition hover:bg-white/20">
-                  <Play size={18} /> View Experiences
+                <a href="#what-we-do" className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-3 font-semibold text-white transition hover:bg-white/20">
+                  <Play size={18} /> What We Do
                 </a>
               </div>
             </motion.div>
@@ -319,6 +335,30 @@ export default function PremiumHome() {
           </div>
         </section>
 
+        <section id="what-we-do" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+          <div className="grid gap-8 rounded-[2rem] border border-white/10 bg-gradient-to-br from-[#004A99]/10 to-[#D71920]/10 p-8 lg:grid-cols-[0.95fr_1.05fr] lg:p-12">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.35em] text-[#D71920]">What We Do</p>
+              <h2 className="mt-3 text-3xl font-semibold sm:text-4xl">Aviation experiences designed around your purpose.</h2>
+              <p className={`mt-5 text-lg leading-8 ${mutedText}`}>From unforgettable flight days to structured training and corporate aviation moments, we shape every experience around comfort, safety and a polished standard of service.</p>
+            </div>
+            <div className="grid gap-4 md:grid-cols-3">
+              {[
+                { title: "Flight Days", text: "Scenic flights, jet sorties and premium aviation adventures." },
+                { title: "Training", text: "Introductory sessions and progression-focused instruction." },
+                { title: "Private Events", text: "Gift experiences, celebrations and bespoke aviation occasions." },
+              ].map((item) => (
+                <div key={item.title} className="rounded-[1.5rem] border border-white/10 bg-white/70 p-5 shadow-sm dark:bg-slate-900/70">
+                  <h3 className="text-lg font-semibold">{item.title}</h3>
+                  <p className={`mt-3 text-sm leading-7 ${mutedText}`}>{item.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <div id="training" className="sr-only" />
+        <div id="gifts" className="sr-only" />
         <section id="experiences" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-3 text-center">
             <p className="text-sm font-semibold uppercase tracking-[0.35em] text-[#D71920]">Signature services</p>
@@ -349,9 +389,9 @@ export default function PremiumHome() {
             <div className="relative overflow-hidden rounded-[2rem]">
               <Image src="https://cdn.jetphotos.com/full/6/38960_1594362177.jpg" alt="Aero L-39 Albatros in premium flight setting" width={900} height={700} className="h-full w-full object-cover" />
               <div className="pointer-events-none absolute right-6 top-6 max-w-xs rounded-3xl border border-white/20 bg-slate-950/80 p-5 text-white shadow-2xl backdrop-blur-xl sm:right-10">
-                <p className="text-xs uppercase tracking-[0.35em] text-[#D71920]">Premium launchpad</p>
-                <h3 className="mt-2 text-xl font-semibold">Flight briefing on the front-right</h3>
-                <p className="mt-3 text-sm text-slate-300">Anchored in the image’s front right, this badge brings visual focus to our elite offerings.</p>
+                <p className="text-xs uppercase tracking-[0.35em] text-[#D71920]">Private and polished</p>
+                <h3 className="mt-2 text-xl font-semibold">A calm, professional experience from first enquiry to landing</h3>
+                <p className="mt-3 text-sm text-slate-300">Every detail is shaped around comfort, safety and confidence.</p>
               </div>
             </div>
             <div className="flex flex-col justify-center">
@@ -407,7 +447,7 @@ export default function PremiumHome() {
                   </ul>
                   <div className="mt-6 flex gap-3">
                     <button className="flex-1 rounded-full border border-white/10 px-4 py-3 text-sm font-semibold transition hover:bg-white/10">Learn More</button>
-                    <button onClick={() => { setAuthMode("register"); setAuthModalOpen(true); }} className="flex-1 rounded-full bg-[#D71920] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#b7141a]">Book</button>
+                    <button onClick={() => { setAuthMode("register"); setAuthModalOpen(true); }} className="flex-1 rounded-full bg-[#D71920] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#b7141a]">Enquire</button>
                   </div>
                 </div>
               </motion.article>
@@ -418,9 +458,9 @@ export default function PremiumHome() {
         <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           <div className={`grid gap-8 rounded-[2rem] border border-white/10 p-8 lg:grid-cols-[0.95fr_1.05fr] lg:p-12 ${panelClass}`}>
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.35em] text-[#D71920]">Flight booking</p>
-              <h2 className="mt-3 text-3xl font-semibold sm:text-4xl">Reserve your aviation experience.</h2>
-              <p className={`mt-5 max-w-xl text-lg leading-8 ${mutedText}`}>From a scenic flight to a certification-level lesson, every booking is followed by a dedicated courtesy call from our concierge team.</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.35em] text-[#D71920]">Enquiries</p>
+              <h2 className="mt-3 text-3xl font-semibold sm:text-4xl">Tell us what you’d like to experience.</h2>
+              <p className={`mt-5 max-w-xl text-lg leading-8 ${mutedText}`}>Whether you are planning a first flight, a training session, or a bespoke aviation occasion, we will follow up with the right options.</p>
             </div>
             <form onSubmit={handleSubmit(onSubmitBooking)} className="grid gap-4 md:grid-cols-2">
               <div className="md:col-span-2">
@@ -471,7 +511,7 @@ export default function PremiumHome() {
               </div>
               <div className="md:col-span-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <button type="submit" disabled={isSubmitting} className="rounded-full bg-[#D71920] px-6 py-3 font-semibold text-white transition hover:bg-[#b7141a] disabled:opacity-70">
-                  {isSubmitting ? "Submitting..." : "Book Flight"}
+                  {isSubmitting ? "Submitting..." : "Send Enquiry"}
                 </button>
                 {bookingMessage ? <p className="text-sm font-medium text-[#004A99] dark:text-[#7db6ff]">{bookingMessage}</p> : null}
               </div>
@@ -563,7 +603,7 @@ export default function PremiumHome() {
               <h2 className="mt-4 text-3xl font-semibold sm:text-4xl">Reserve your next aviation story.</h2>
               <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-300">Luxury service, exceptional instruction, and unforgettable moments await from your first call to your final landing.</p>
               <div className="mt-8 flex flex-wrap gap-4">
-                <button onClick={() => { setAuthMode("register"); setAuthModalOpen(true); }} className="rounded-full bg-[#D71920] px-6 py-3 font-semibold text-white transition hover:bg-[#b7141a]">Book Today</button>
+                <button onClick={() => { setAuthMode("register"); setAuthModalOpen(true); }} className="rounded-full bg-[#D71920] px-6 py-3 font-semibold text-white transition hover:bg-[#b7141a]">Enquire Today</button>
                 <a href="#contact" className="rounded-full border border-white/20 px-6 py-3 font-semibold text-white transition hover:bg-white/10">Contact Us</a>
               </div>
             </div>
