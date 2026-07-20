@@ -57,6 +57,16 @@ const navGroups = [
   { label: "Contact", items: [{ label: "Get in Touch", href: "#contact" }, { label: "Enquire", href: "#contact" }] },
 ];
 
+const sectionVariants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 18 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.55 } },
+};
+
 const aircraft = [
   {
     name: "Cessna 172P — G-HIGA",
@@ -303,11 +313,11 @@ export default function PremiumHome() {
               <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300 sm:text-xl">
                 Discover private flying days, structured training, and premium aviation moments tailored to your goals with a calm and polished team.
               </p>
-              <div className="mt-10 flex flex-wrap gap-4">
-                <button onClick={() => { setAuthMode("register"); setAuthModalOpen(true); }} className="inline-flex items-center gap-2 rounded-full bg-[#D71920] px-6 py-3 font-semibold text-white transition hover:bg-[#b7141a]">
+              <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
+                <button onClick={() => { setAuthMode("register"); setAuthModalOpen(true); }} className="inline-flex w-full justify-center items-center gap-2 rounded-full bg-[#D71920] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#b7141a] sm:w-auto">
                   Explore Our Services <ArrowRight size={18} />
                 </button>
-                <a href="#what-we-do" className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-3 font-semibold text-white transition hover:bg-white/20">
+                <a href="#what-we-do" className="inline-flex w-full justify-center items-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/20 sm:w-auto">
                   <Play size={18} /> What We Do
                 </a>
               </div>
@@ -331,7 +341,7 @@ export default function PremiumHome() {
           </div>
         </section>
 
-        <section id="what-we-do" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+        <motion.section id="what-we-do" initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={sectionVariants} className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="grid gap-8 rounded-[2rem] border border-white/10 bg-gradient-to-br from-[#004A99]/10 to-[#D71920]/10 p-8 lg:grid-cols-[0.95fr_1.05fr] lg:p-12">
             <div>
               <p className="text-sm font-semibold uppercase tracking-[0.35em] text-[#D71920]">What We Do</p>
@@ -351,17 +361,17 @@ export default function PremiumHome() {
               ))}
             </div>
           </div>
-        </section>
+        </motion.section>
 
         <div id="training" className="sr-only" />
         <div id="gifts" className="sr-only" />
-        <section id="experiences" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+        <motion.section id="experiences" initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={sectionVariants} className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-3 text-center">
             <p className="text-sm font-semibold uppercase tracking-[0.35em] text-[#D71920]">Signature services</p>
             <h2 className="text-3xl font-semibold sm:text-4xl">Elevated aviation, tailored to your ambition.</h2>
             <p className={`mx-auto max-w-2xl text-lg ${mutedText}`}>Premium services for sightseeing, training, corporate events, and unforgettable gift experiences.</p>
           </div>
-          <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          <motion.div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3" initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={sectionVariants}>
             {services.map((service) => {
               const Icon = service.icon;
               return (
@@ -377,10 +387,10 @@ export default function PremiumHome() {
                 </motion.article>
               );
             })}
-          </div>
-        </section>
+          </motion.div>
+        </motion.section>
 
-        <section id="about" className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <motion.section id="about" initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={sectionVariants} className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           <div className="grid gap-10 rounded-[2rem] border border-white/10 bg-gradient-to-br from-[#004A99]/10 to-[#D71920]/10 p-8 lg:grid-cols-[1.1fr_0.9fr] lg:p-12">
             <div className="relative overflow-hidden rounded-[2rem]">
               <Image src="https://cdn.jetphotos.com/full/6/38960_1594362177.jpg" alt="Aero L-39 Albatros in premium flight setting" width={900} height={700} className="h-full w-full object-cover" />
@@ -405,9 +415,9 @@ export default function PremiumHome() {
               </ul>
             </div>
           </div>
-        </section>
+        </motion.section>
 
-        <section id="fleet" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+        <motion.section id="fleet" initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={sectionVariants} className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
               <p className="text-sm font-semibold uppercase tracking-[0.35em] text-[#D71920]">Fleet lineup</p>
@@ -418,7 +428,7 @@ export default function PremiumHome() {
 
           <div className="mt-10 grid gap-6 md:grid-cols-2">
             {aircraft.map((item) => (
-              <motion.article key={item.name} whileHover={{ y: -8, scale: 1.01 }} className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/10 shadow-xl backdrop-blur">
+              <motion.article key={item.name} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={cardVariants} whileHover={{ y: -8, scale: 1.01 }} className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/10 shadow-xl backdrop-blur">
                 <Image src={item.image} alt={item.name} width={800} height={520} className="h-56 w-full object-cover" />
                 <div className="p-6">
                   <div className="flex items-center justify-between gap-4">
@@ -444,9 +454,9 @@ export default function PremiumHome() {
               </motion.article>
             ))}
           </div>
-        </section>
+        </motion.section>
 
-        <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <motion.section initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={sectionVariants} className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           <div className={`grid gap-8 rounded-[2rem] border border-white/10 p-8 lg:grid-cols-[0.95fr_1.05fr] lg:p-12 ${panelClass}`}>
             <div>
               <p className="text-sm font-semibold uppercase tracking-[0.35em] text-[#D71920]">Enquiries</p>
@@ -508,7 +518,7 @@ export default function PremiumHome() {
               </div>
             </form>
           </div>
-        </section>
+        </motion.section>
 
         <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-3 text-center">
@@ -540,7 +550,7 @@ export default function PremiumHome() {
             <p className="text-sm font-semibold uppercase tracking-[0.35em] text-[#D71920]">Gallery</p>
             <h2 className="text-3xl font-semibold sm:text-4xl">A rotating collection of cinematic aviation moments.</h2>
           </div>
-          <div className="mt-10 grid gap-6 rounded-[2rem] border border-white/10 bg-white/10 p-4 shadow-xl backdrop-blur lg:grid-cols-[1.2fr_0.8fr] lg:p-6">
+          <motion.div className="mt-10 grid gap-6 rounded-[2rem] border border-white/10 bg-white/10 p-4 shadow-xl backdrop-blur lg:grid-cols-[1.2fr_0.8fr] lg:p-6" initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={sectionVariants}>
             <motion.div key={galleryIndex} initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.4 }} className="overflow-hidden rounded-[2rem]">
               <Image src={galleryImgs[galleryIndex]} alt={`Aviation gallery ${galleryIndex + 1}`} width={1200} height={900} className="h-[320px] w-full object-cover sm:h-[420px]" />
             </motion.div>
@@ -563,7 +573,7 @@ export default function PremiumHome() {
                 <span className="text-sm text-slate-400">{galleryIndex + 1} / {galleryImgs.length}</span>
               </div>
             </div>
-          </div>
+          </motion.div>
         </section>
 
         <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
