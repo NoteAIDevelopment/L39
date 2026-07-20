@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, BookOpen, BriefcaseBusiness, CheckCircle2, Clock3, Compass, Gift, GraduationCap, Mail, MapPin, Menu, MoonStar, Phone, Plane, Play, Sparkles, Stars, SunMedium, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -52,9 +52,34 @@ const services = [
 ];
 
 const aircraft = [
-  { name: "AeroJet X8", speed: "520 mph", seats: "4", level: "Intermediate", image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=900&q=80" },
-  { name: "Falcon T3", speed: "610 mph", seats: "6", level: "Advanced", image: "https://images.unsplash.com/photo-1517479149777-5f3b1511d5ad?auto=format&fit=crop&w=900&q=80" },
-  { name: "Skyline V2", speed: "470 mph", seats: "2", level: "Beginner", image: "https://images.unsplash.com/photo-1488085061387-422e29b40080?auto=format&fit=crop&w=900&q=80" },
+  {
+    name: "Cessna 172P — G-HIGA",
+    description: "Primary PPL/LAPL training aircraft",
+    level: "4 seats",
+    features: ["Primary PPL/LAPL training aircraft", "4 seats", "Proven trainer for student pilots"],
+    image: "https://live.staticflickr.com/65535/52950790530_35731b3a37_b.jpg",
+  },
+  {
+    name: "Robin 2120U — G-HIGB",
+    description: "2-seat aerobatic trainer for advanced handling and experience flights.",
+    level: "2 seats",
+    features: ["2-seat trainer", "Aerobatics capable", "Used for training and experience flights"],
+    image: "https://live.staticflickr.com/65535/51811835360_17c1901f78_b.jpg",
+  },
+  {
+    name: "Aero L-39 Albatros — G-SHMB",
+    description: "Jet experience flights for formation flying and advanced training.",
+    level: "Jet experience",
+    features: ["Jet experience flights", "Formation flying", "Advanced training", "Registration: G-SHMB"],
+    image: "https://live.staticflickr.com/65535/51880682244_1b3e61fb43_b.jpg",
+  },
+  {
+    name: "BAE Hawk T1 — G-HAWC",
+    description: "Fast jet experience and display aircraft for premium high-performance flights.",
+    level: "Fast jet",
+    features: ["Fast jet experience/display aircraft", "Registration: G-HAWC"],
+    image: "https://cdn.jetphotos.com/400/6/976480_1779536155.jpg",
+  },
 ];
 
 const reviews = [
@@ -125,7 +150,7 @@ export default function PremiumHome() {
   });
   const [activeFaq, setActiveFaq] = useState(0);
   const [bookingMessage, setBookingMessage] = useState<string | null>(null);
-  const aircraftRowRef = useRef<HTMLDivElement | null>(null);
+  const [galleryIndex, setGalleryIndex] = useState(0);
 
   const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<BookingFormValues>({
     resolver: zodResolver(bookingSchema as never),
@@ -140,6 +165,14 @@ export default function PremiumHome() {
     document.documentElement.classList.toggle("dark", theme === "dark");
     window.localStorage.setItem("aero-theme", theme);
   }, [theme]);
+
+  useEffect(() => {
+    const intervalId = window.setInterval(() => {
+      setGalleryIndex((current) => (current + 1) % galleryImgs.length);
+    }, 5000);
+
+    return () => window.clearInterval(intervalId);
+  }, []);
 
   const navClass = theme === "dark" ? "bg-slate-950/80 text-slate-100" : "bg-white/80 text-slate-900";
   const panelClass = theme === "dark" ? "bg-slate-900/70 text-slate-100" : "bg-white/90 text-slate-900";
@@ -162,13 +195,6 @@ export default function PremiumHome() {
     } catch (error) {
       setBookingMessage(error instanceof Error ? error.message : "The booking request failed");
     }
-  };
-
-  const scrollAircraft = (direction: "left" | "right") => {
-    const el = aircraftRowRef.current;
-    if (!el) return;
-    const amount = direction === "left" ? -360 : 360;
-    el.scrollBy({ left: amount, behavior: "smooth" });
   };
 
   return (
@@ -246,7 +272,7 @@ export default function PremiumHome() {
         <section className="relative isolate overflow-hidden">
           <div className="absolute inset-0 h-full w-full">
             <img
-              src="/l39-hero.jpg"
+              src="https://live.staticflickr.com/65535/51880682244_1b3e61fb43_b.jpg"
               alt="Aero L-39 Albatros landing on runway"
               className="h-full w-full object-cover"
               loading="eager"
@@ -320,8 +346,13 @@ export default function PremiumHome() {
 
         <section id="about" className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           <div className="grid gap-10 rounded-[2rem] border border-white/10 bg-gradient-to-br from-[#004A99]/10 to-[#D71920]/10 p-8 lg:grid-cols-[1.1fr_0.9fr] lg:p-12">
-            <div className="overflow-hidden rounded-[2rem]">
-              <Image src="https://images.unsplash.com/photo-1517479149777-5f3b1511d5ad?auto=format&fit=crop&w=1400&q=80" alt="Pilot preparing for a premium aviation experience" width={900} height={700} className="h-full w-full object-cover" />
+            <div className="relative overflow-hidden rounded-[2rem]">
+              <Image src="https://cdn.jetphotos.com/full/6/38960_1594362177.jpg" alt="Aero L-39 Albatros in premium flight setting" width={900} height={700} className="h-full w-full object-cover" />
+              <div className="pointer-events-none absolute right-6 top-6 max-w-xs rounded-3xl border border-white/20 bg-slate-950/80 p-5 text-white shadow-2xl backdrop-blur-xl sm:right-10">
+                <p className="text-xs uppercase tracking-[0.35em] text-[#D71920]">Premium launchpad</p>
+                <h3 className="mt-2 text-xl font-semibold">Flight briefing on the front-right</h3>
+                <p className="mt-3 text-sm text-slate-300">Anchored in the image’s front right, this badge brings visual focus to our elite offerings.</p>
+              </div>
             </div>
             <div className="flex flex-col justify-center">
               <p className="text-sm font-semibold uppercase tracking-[0.35em] text-[#D71920]">Why choose us</p>
@@ -348,28 +379,32 @@ export default function PremiumHome() {
         <section id="fleet" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.35em] text-[#D71920]">Featured aircraft</p>
-              <h2 className="text-3xl font-semibold sm:text-4xl">Our fleet, curated for performance and comfort.</h2>
-            </div>
-            <div className="flex gap-3">
-              <button onClick={() => scrollAircraft("left")} className="rounded-full border border-white/10 bg-white/10 p-3 transition hover:bg-white/20">←</button>
-              <button onClick={() => scrollAircraft("right")} className="rounded-full border border-white/10 bg-white/10 p-3 transition hover:bg-white/20">→</button>
+              <p className="text-sm font-semibold uppercase tracking-[0.35em] text-[#D71920]">Fleet lineup</p>
+              <h2 className="text-3xl font-semibold sm:text-4xl">🛩️ Fast Jet & Advanced Aircraft</h2>
+              <p className={`mt-3 max-w-2xl text-lg ${mutedText}`}>Our fleet runs from trusted primary trainers to advanced jet platforms for high-performance flight experiences.</p>
             </div>
           </div>
 
-          <div ref={aircraftRowRef} className="mt-10 flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory">
+          <div className="mt-10 grid gap-6 md:grid-cols-2">
             {aircraft.map((item) => (
-              <motion.article key={item.name} whileHover={{ y: -8, scale: 1.01 }} className="min-w-[300px] snap-start overflow-hidden rounded-[2rem] border border-white/10 bg-white/10 shadow-xl backdrop-blur sm:min-w-[360px]">
+              <motion.article key={item.name} whileHover={{ y: -8, scale: 1.01 }} className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/10 shadow-xl backdrop-blur">
                 <Image src={item.image} alt={item.name} width={800} height={520} className="h-56 w-full object-cover" />
                 <div className="p-6">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-2xl font-semibold">{item.name}</h3>
+                  <div className="flex items-center justify-between gap-4">
+                    <div>
+                      <h3 className="text-2xl font-semibold">{item.name}</h3>
+                      <p className="mt-2 text-sm text-slate-400">{item.description}</p>
+                    </div>
                     <div className="rounded-full bg-[#004A99]/10 px-3 py-1 text-sm font-semibold text-[#004A99]">{item.level}</div>
                   </div>
-                  <div className="mt-6 grid gap-4 text-sm text-slate-300 sm:grid-cols-2">
-                    <div><p className="text-slate-500">Top speed</p><p className="mt-1 font-semibold">{item.speed}</p></div>
-                    <div><p className="text-slate-500">Seats</p><p className="mt-1 font-semibold">{item.seats}</p></div>
-                  </div>
+                  <ul className="mt-6 space-y-3 text-sm text-slate-300">
+                    {item.features.map((feature) => (
+                      <li key={feature} className="flex items-start gap-3">
+                        <span className="mt-1 h-2 w-2 rounded-full bg-[#D71920]" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
                   <div className="mt-6 flex gap-3">
                     <button className="flex-1 rounded-full border border-white/10 px-4 py-3 text-sm font-semibold transition hover:bg-white/10">Learn More</button>
                     <button onClick={() => { setAuthMode("register"); setAuthModalOpen(true); }} className="flex-1 rounded-full bg-[#D71920] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#b7141a]">Book</button>
@@ -472,14 +507,31 @@ export default function PremiumHome() {
         <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-3 text-center">
             <p className="text-sm font-semibold uppercase tracking-[0.35em] text-[#D71920]">Gallery</p>
-            <h2 className="text-3xl font-semibold sm:text-4xl">A collection of cinematic aviation moments.</h2>
+            <h2 className="text-3xl font-semibold sm:text-4xl">A rotating collection of cinematic aviation moments.</h2>
           </div>
-          <div className="mt-10 columns-1 gap-4 space-y-4 md:columns-2 xl:columns-3">
-            {galleryImgs.map((item, index) => (
-              <motion.div key={item} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} whileHover={{ scale: 1.01 }} className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/10 shadow-xl">
-                <Image src={item} alt={`Aviation gallery ${index + 1}`} width={800} height={900} className="h-auto w-full object-cover transition duration-500 hover:scale-110" />
-              </motion.div>
-            ))}
+          <div className="mt-10 grid gap-6 rounded-[2rem] border border-white/10 bg-white/10 p-4 shadow-xl backdrop-blur lg:grid-cols-[1.2fr_0.8fr] lg:p-6">
+            <motion.div key={galleryIndex} initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.4 }} className="overflow-hidden rounded-[2rem]">
+              <Image src={galleryImgs[galleryIndex]} alt={`Aviation gallery ${galleryIndex + 1}`} width={1200} height={900} className="h-[320px] w-full object-cover sm:h-[420px]" />
+            </motion.div>
+            <div className="flex flex-col justify-between gap-6">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.35em] text-[#D71920]">Featured scene</p>
+                <h3 className="mt-3 text-2xl font-semibold">Rotating highlights for a cleaner layout.</h3>
+                <p className="mt-4 text-lg leading-8 text-slate-400">Each image cycles automatically so the gallery stays compact while still feeling rich and cinematic.</p>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                {galleryImgs.map((item, index) => (
+                  <button key={item} onClick={() => setGalleryIndex(index)} className={`overflow-hidden rounded-2xl border transition ${index === galleryIndex ? "border-[#D71920] ring-2 ring-[#D71920]/20" : "border-white/10"}`}>
+                    <Image src={item} alt={`Gallery thumbnail ${index + 1}`} width={120} height={90} className="h-20 w-24 object-cover" />
+                  </button>
+                ))}
+              </div>
+              <div className="flex items-center gap-3">
+                <button onClick={() => setGalleryIndex((current) => (current === 0 ? galleryImgs.length - 1 : current - 1))} className="rounded-full border border-white/10 bg-white/10 px-4 py-2 font-semibold transition hover:bg-white/20">← Prev</button>
+                <button onClick={() => setGalleryIndex((current) => (current + 1) % galleryImgs.length)} className="rounded-full border border-white/10 bg-white/10 px-4 py-2 font-semibold transition hover:bg-white/20">Next →</button>
+                <span className="text-sm text-slate-400">{galleryIndex + 1} / {galleryImgs.length}</span>
+              </div>
+            </div>
           </div>
         </section>
 
