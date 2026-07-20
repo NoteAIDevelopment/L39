@@ -244,8 +244,15 @@ export default function PremiumHome() {
 
       <main id="home">
         <section className="relative isolate overflow-hidden">
-          <video className="absolute inset-0 h-full w-full object-cover" src="https://videos.pexels.com/video-files/3758585/3758585-hd_1920_1080_25fps.mp4" autoPlay muted loop playsInline />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(0,74,153,0.75),_transparent_45%),linear-gradient(90deg,rgba(0,0,0,0.95),rgba(0,0,0,0.45))]" />
+          <div className="absolute inset-0 h-full w-full">
+            <img
+              src="/l39-hero.jpg"
+              alt="Aero L-39 Albatros landing on runway"
+              className="h-full w-full object-cover"
+              loading="eager"
+            />
+          </div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(0,74,153,0.35),_transparent_45%),linear-gradient(90deg,rgba(0,0,0,0.45),rgba(0,0,0,0.15))]" />
           <div className="relative mx-auto flex min-h-screen max-w-7xl flex-col justify-center px-4 py-24 sm:px-6 lg:px-8">
             <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }} className="max-w-3xl">
               <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-medium text-slate-200 backdrop-blur-md">
