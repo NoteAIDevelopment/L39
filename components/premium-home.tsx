@@ -297,10 +297,6 @@ export default function PremiumHome() {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(0,74,153,0.35),_transparent_45%),linear-gradient(90deg,rgba(0,0,0,0.45),rgba(0,0,0,0.15))]" />
           <div className="relative mx-auto flex min-h-screen max-w-7xl flex-col justify-center px-4 py-24 sm:px-6 lg:px-8">
             <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }} className="max-w-3xl">
-              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-medium text-slate-200 backdrop-blur-md">
-                <Sparkles size={16} className="text-[#D71920]" />
-                Tailored aviation experiences and specialist instruction
-              </div>
               <h1 className="text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-7xl">
                 Elevate your next flight.
               </h1>
@@ -388,11 +384,6 @@ export default function PremiumHome() {
           <div className="grid gap-10 rounded-[2rem] border border-white/10 bg-gradient-to-br from-[#004A99]/10 to-[#D71920]/10 p-8 lg:grid-cols-[1.1fr_0.9fr] lg:p-12">
             <div className="relative overflow-hidden rounded-[2rem]">
               <Image src="https://cdn.jetphotos.com/full/6/38960_1594362177.jpg" alt="Aero L-39 Albatros in premium flight setting" width={900} height={700} className="h-full w-full object-cover" />
-              <div className="pointer-events-none absolute right-6 top-6 max-w-xs rounded-3xl border border-white/20 bg-slate-950/80 p-5 text-white shadow-2xl backdrop-blur-xl sm:right-10">
-                <p className="text-xs uppercase tracking-[0.35em] text-[#D71920]">Private and polished</p>
-                <h3 className="mt-2 text-xl font-semibold">A calm, professional experience from first enquiry to landing</h3>
-                <p className="mt-3 text-sm text-slate-300">Every detail is shaped around comfort, safety and confidence.</p>
-              </div>
             </div>
             <div className="flex flex-col justify-center">
               <p className="text-sm font-semibold uppercase tracking-[0.35em] text-[#D71920]">Why choose us</p>
